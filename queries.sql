@@ -58,15 +58,30 @@ SELECT order_id, SUM( quantity * price ) FROM order_items GROUP BY order_id;
 -- ===================== Часть C. Несколько таблиц =====================
 
 -- Задание 16. Название товара и название его категории
-
+SELECT products.name, categories.name 
+FROM products 
+JOIN categories ON products.category_id = categories.id;
 
 -- Задание 17. Номер заказа, дата заказа и название клиента
-
+SELECT orders.id, order_date, clients.name
+FROM orders
+JOIN clients ON orders.client_id = clients.id;
 
 -- Задание 18. Три клиента, которые купили больше всех: название клиента и сумма всех его заказов, от большей к меньшей
-
+SELECT clients.name, SUM( order_items.quantity * order_items.price) AS total_sum
+FROM clients
+JOIN orders ON clients.id = orders.client_id
+JOIN order_items ON orders.id = order_items.order_id
+GROUP BY clients.name
+ORDER BY total_sum DESC
+LIMIT 3;
 
 -- Задание 19. Названия товаров, которые ни разу не заказывали
+-- Задание 19. Названия товаров, которые ни разу не заказывали
+SELECT products.name
+FROM products
+LEFT JOIN order_items  ON products.id = order_items.product_id
+WHERE order_items.product_id IS NULL;
 
 
 -- ===================== Часть D. Изменение данных =====================
